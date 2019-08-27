@@ -8,9 +8,22 @@ client.connect(err => {
   const collection = client.db("Esiea").collection("Students");
   var obj = [
       //constructor(f_name, l_name, email, sector, birthdate, address, grades, absence, password)
-    new Student('Guillaume', 'Teak', 'teak@et.esiea.fr', 'information system', "01/01/1960", "XXX", [15, 20, 16, 9, 8], 8, bcrypt.hashSync("ktuzbdzbakd191-Z9", 15)),
-    new Student('Joseph-Emmanuel', 'Banzio', 'banzio@et.esiea.fr', 'information system', "20/04/1998", "89 rue de Villiers, 92200 Neuilly-sur-Seine", [12, 17, 19, 20, 15], 10, bcrypt.hashSync("zoblazo09", 15)),
-    new Student('Robert', 'Bui', 'rbui@et.esiea.fr', 'information system', "01/02/1920", "rue du xxx", [20, 14, 19, 18, 16], 0, bcrypt.hashSync("zèezçeàze!", 15))
+    new Student('Guillaume', 'Teak', 'teak@et.esiea.fr', 'information system', "01/01/1960", "XXX", 
+    { android: 15,
+      cryptography: 16,
+      data_science: 12,
+      statistics: 0,
+      stm32_microprocessor: 15}, 8, bcrypt.hashSync("ktuzbdzbakd191-Z9", 15)),
+    new Student('Joseph-Emmanuel', 'Banzio', 'banzio@et.esiea.fr', 'information system', "20/04/1998", "89 rue de Villiers, 92200 Neuilly-sur-Seine",{ android: 19,
+      cryptography: 18,
+      data_science: 20,
+      statistics: 10,
+      stm32_microprocessor: 13}, 10, bcrypt.hashSync("zoblazo09", 15)),
+    new Student('Robert', 'Bui', 'rbui@et.esiea.fr', 'information system', "01/02/1920", "rue du xxx", { android: 19,
+      cryptography: 19,
+      data_science: 18,
+      statistics: 20,
+      stm32_microprocessor: 17}, 0, bcrypt.hashSync("zèezçeàze!", 15))
   ];
   collection.insertMany(obj, function(err, res){
       if (err) throw err
