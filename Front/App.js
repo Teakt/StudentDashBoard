@@ -4,6 +4,8 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import CardStack, { Card } from 'react-native-card-stack-swiper';
 import Video from 'react-native-video'
 
+// wesh
+
 export default class App extends React.Component {
   render() {
     return <AppContainer />;
