@@ -23,7 +23,7 @@ On récupère un email et un mdp dans l'URL
 et on va d'abord chercher si l'email existe dans la bd si elle existe
 alors on vérifie le mdp si c bon on retourne un message 
 */
-
+/** Authentification URL Request */
 app.get('/authentification/:email/:password', function(req, res){
   const client = new MongoClient(uri, { useNewUrlParser: true })
   client.connect(err => {
@@ -49,5 +49,31 @@ app.get('/authentification/:email/:password', function(req, res){
           }
     })
   client.close();
-});
+  });
 })
+
+/** GET All Grades URL Request */
+app.get('/getAllGradesFromStudent/:email', function(req, res){
+  const client = new MongoClient(uri, { useNewUrlParser: true })
+  client.connect(err => {
+    const collection = client.db("Esiea").collection("Students")  
+    var umail = req.params.email
+        query = { email: umail }
+    
+    collection.find(query).toArray(function(err, result){
+      console.log('Get All Grades of ' + result[0].f_name + " " + result[0].l_name)
+        if (err) throw err
+        if(result.length < 1)
+          res.send("Email not found!") //on retourne un message d'erreur res.send(
+        else
+          res.send(result[0].grades)
+    })
+  client.close();
+  });
+})
+//Get All Grades
+
+//Get Absence
+
+
+
