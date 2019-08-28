@@ -6,9 +6,9 @@ const MongoClient = require('mongodb').MongoClient
 var express = require('express')
     app = express()
 
-    app.use(function(req, res, next) {
-        res.header("Access-Control-Allow-Origin", "*")
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    app.use(function(req, response, next) {
+        response.header("Access-Control-Allow-Origin", "*")
+        response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
         next()
       })
 
@@ -20,7 +20,7 @@ var server = app.listen(8081, "127.0.0.1",function () {
 
 
 /** Authentification URL Request */
-app.get('/authentification/:email/:password', function(req, res){
+app.get('/authentification/:email/:password', function(req, response){
   const client = new MongoClient(uri, { useNewUrlParser: true })
   client.connect(err => {
     const collection = client.db("Esiea").collection("Students")  
@@ -33,15 +33,15 @@ app.get('/authentification/:email/:password', function(req, res){
     collection.find(query).toArray(function(err, result){
         if (err) throw err
         if(result.length < 1)
-          res.send("Email not found!") //on retourne un message d'erreur res.send(
+          response.send("Email not found!") //on retourne un message d'erreur response.send(
         else{
           console.log("Email verification")
           var dbpwd = result[0].password
           console.log("Password verification")
           if(upwd == dbpwd)
-              res.send("Successfully connected!")
+              response.send("Successfully connected!")
           else
-              res.send("Wrong password")
+              response.send("Wrong password")
           }
     })
   client.close();
@@ -49,7 +49,7 @@ app.get('/authentification/:email/:password', function(req, res){
 })
 
 /** GET All Grades URL Request */
-app.get('/getAllGrades/:email', function(req, res){
+app.get('/getAllGrades/:email', function(req, response){
   const client = new MongoClient(uri, { useNewUrlParser: true })
   client.connect(err => {
     const collection = client.db("Esiea").collection("Students")  
@@ -59,17 +59,18 @@ app.get('/getAllGrades/:email', function(req, res){
     collection.find(query).toArray(function(err, result){
       if (err) throw err
       if(result.length < 1)
-        res.send("Email not found!") //on retourne un message d'erreur res.send(
+        response.send("Email not found!") //on retourne un message d'erreur response.send(
       else{
         console.log('Get All Grades of ' + result[0].f_name + " " + result[0].l_name)
-        res.send(result[0].grades)
+        response.send(result[0].grades)
       }
     })
   client.close();
   });
 })
 
-app.get('/getNumberOfAbs/:email', function(req, res){
+/* Get Number Of Absences */
+app.get('/getNumberOfAbs/:email', function(req, response){
 
   const client = new MongoClient(uri, { useNewUrlParser: true })
   client.connect(err => {
@@ -81,16 +82,14 @@ app.get('/getNumberOfAbs/:email', function(req, res){
       if (err) throw err
       
       if(result.length < 1)
-        res.send("Email not found!") //on retourne un message d'erreur 
+        response.send("Email not found!") //on retourne un message d'erreur 
       else{
         console.log('Get Number of Absences of ' + result[0].f_name + " " + result[0].l_name)
-        res.send(''+ result[0].absence)
+        response.send(''+ result[0].absence)
       }
     })
   client.close();
   });
 })
-//Get Absence
-
 
 
