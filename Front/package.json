@@ -1,15 +1,13 @@
 {
-  "name": "test",
+  "name": "student_dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.3.3",
     "@material-ui/icons": "^4.2.1",
-    "bootstrap": "^4.3.1",
-    "material-ui-icons": "^1.0.0-beta.36",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-responsive-widget": "^2.1.0",
+    "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.1"
   },
   "scripts": {
