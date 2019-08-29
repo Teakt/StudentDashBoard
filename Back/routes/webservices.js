@@ -33,15 +33,15 @@ app.get('/authentification/:email/:password', function(req, response){
     collection.find(query).toArray(function(err, result){
         if (err) throw err
         if(result.length < 1)
-          response.send("Email not found!") //on retourne un message d'erreur response.send(
+          response.send(500) //Erreur serveur
         else{
           console.log("Email verification")
           var dbpwd = result[0].password
           console.log("Password verification")
           if(upwd == dbpwd)
-              response.send("Successfully connected!")
+              response.send(200) //Succès
           else
-              response.send("Wrong password")
+              response.send(403) // Accès refusé / Mot de passe incorrect
           }
     })
   client.close();
