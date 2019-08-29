@@ -92,4 +92,27 @@ app.get('/getNumberOfAbs/:email', function(req, response){
   });
 })
 
+/* Get Calendar Info
+  Fichier JSON qui contient les diffférentes informations sur le calendrier de l'étudiant
+  chaque étudiant a un object de type Calendar qui correspond à son edt / format json
+  La partie qui nous intéresse est le Vevent qui contient tous les événements de la semaine
+*/
 
+app.get('/getCalendar/:email', function(req, response){
+    const client = new MongoClient(uri, {useNewUrlParser: true})
+    client.connect(err => {
+          const collection = client.db("Esiea").collection("Students")
+          var umail = req.params.email
+              query = {email: umail}
+
+          collection.find(query).toArray(function(err, result){
+              if (err) throw err;
+          if(result.length < 1)
+              response.send("Something's wrong with the ID/email")
+          else{
+              console.log("Get Calendar Informations")
+
+          }
+          })
+    })
+})
