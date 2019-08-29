@@ -100,10 +100,13 @@ export default function ButtonAppBar() {
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
+          <Button color="inherit" href="#">Calendar</Button>
           <Typography variant="h6" className={classes.title}>
             Student DashBoard
           </Typography>
+         
           <Button color="inherit" onClick={handleClick}>Login</Button>
+          
           <Menu
           id="simple-menu"
           anchorEl={anchorEl}
