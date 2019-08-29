@@ -6,9 +6,9 @@ const MongoClient = require('mongodb').MongoClient
 var express = require('express')
     app = express()
 
-    app.use(function(req, res, next) {
-        res.header("Access-Control-Allow-Origin", "*")
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    app.use(function(req, response, next) {
+        response.header("Access-Control-Allow-Origin", "*")
+        response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
         next()
       })
 
@@ -18,13 +18,9 @@ var server = app.listen(8081, "127.0.0.1",function () {
       console.log("\nStudentDashboard listening at http://%s:%s\n", host, port)
   })
 
-/* Première route /authentification
-On récupère un email et un mdp dans l'URL
-et on va d'abord chercher si l'email existe dans la bd si elle existe
-alors on vérifie le mdp si c bon on retourne un message 
-*/
 
-app.get('/authentification/:email/:password', function(req, res){
+/** Authentification URL Request */
+app.get('/authentification/:email/:password', function(req, response){
   const client = new MongoClient(uri, { useNewUrlParser: true })
   client.connect(err => {
     const collection = client.db("Esiea").collection("Students")  
@@ -37,17 +33,86 @@ app.get('/authentification/:email/:password', function(req, res){
     collection.find(query).toArray(function(err, result){
         if (err) throw err
         if(result.length < 1)
-          res.send("Email not found!") //on retourne un message d'erreur res.send(
+          response.send("Email not found!") //on retourne un message d'erreur response.send(
         else{
           console.log("Email verification")
           var dbpwd = result[0].password
           console.log("Password verification")
           if(upwd == dbpwd)
-              res.send("Successfully connected!")
+              response.send("Successfully connected!")
           else
-              res.send("Wrong password")
+              response.send("Wrong password")
           }
     })
   client.close();
-});
+  });
+})
+
+/** GET All Grades URL Request */
+app.get('/getAllGrades/:email', function(req, response){
+  const client = new MongoClient(uri, { useNewUrlParser: true })
+  client.connect(err => {
+    const collection = client.db("Esiea").collection("Students")  
+    var umail = req.params.email
+        query = { email: umail }
+    
+    collection.find(query).toArray(function(err, result){
+      if (err) throw err
+      if(result.length < 1)
+        response.send("Email not found!") //on retourne un message d'erreur response.send(
+      else{
+        console.log('Get All Grades of ' + result[0].f_name + " " + result[0].l_name)
+        response.send(result[0].grades)
+      }
+    })
+  client.close();
+  });
+})
+
+/* Get Number Of Absences */
+app.get('/getNumberOfAbs/:email', function(req, response){
+
+  const client = new MongoClient(uri, { useNewUrlParser: true })
+  client.connect(err => {
+    const collection = client.db("Esiea").collection("Students")  
+    var umail = req.params.email
+        query = { email: umail }
+    
+    collection.find(query).toArray(function(err, result){
+      if (err) throw err
+      
+      if(result.length < 1)
+        response.send("Email not found!") //on retourne un message d'erreur 
+      else{
+        console.log('Get Number of Absences of ' + result[0].f_name + " " + result[0].l_name)
+        response.send(''+ result[0].absence)
+      }
+    })
+  client.close();
+  });
+})
+
+/* Get Calendar Info
+  Fichier JSON qui contient les diffférentes informations sur le calendrier de l'étudiant
+  chaque étudiant a un object de type Calendar qui correspond à son edt / format json
+  La partie qui nous intéresse est le Vevent qui contient tous les événements de la semaine
+*/
+
+app.get('/getCalendar/:email', function(req, response){
+    const client = new MongoClient(uri, {useNewUrlParser: true})
+    client.connect(err => {
+          const collection = client.db("Esiea").collection("Students")
+          var umail = req.params.email
+              query = {email: umail}
+
+          collection.find(query).toArray(function(err, result){
+              if (err) throw err;
+          if(result.length < 1)
+              response.send("Something's wrong with the ID/email")
+          else{
+              console.log("Get Calendar Informations")
+
+          }
+          })
+    })
 })
