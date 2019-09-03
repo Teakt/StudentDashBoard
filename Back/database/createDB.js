@@ -1,5 +1,4 @@
 const MongoClient = require('mongodb').MongoClient
-const bcrypt = require('bcryptjs')
 const uri = "mongodb+srv://ghaust:EW63BjZ6FFBv5L6X@web-project-nvcrn.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true })
 let Student = require('./Student')
@@ -8,7 +7,6 @@ let Student = require('./Student')
 client.connect(err => {
   const collection = client.db("Esiea").collection("Students");
   var obj = [
-      //constructor(f_name, l_name, email, sector, birthdate, address, grades, absence, password)
     new Student('Yusuf', 'Doe', 'ydoe@et.esiea.fr', 'information system', "01/01/1960", "XXX", 
     {
       "Technical Common Core":{
@@ -55,7 +53,7 @@ client.connect(err => {
   collection.insertMany(obj, function(err, res){
       if (err) throw err
       console.log("Number of documents inserted : " + res.insertedCount)
-      
+      //console.log("Element inserted " + obj)
   })
   
   client.close();
