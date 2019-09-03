@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { BrowserRouter } from 'react-router-dom'
 
 import Home from './Home'
@@ -7,10 +7,36 @@ import Calendar from './Calendar'
 
 class Header extends React.Component {
 
-    render(){
-        return (
-        
+    constructor(props){
+        super(props);
 
+        this.state = {
+            first: null ,
+            second: null, 
+            result: null
+        };
+        
+    }
+
+    
+
+
+    componentDidMount(){}
+    render(){
+        const { first , second ,result } = this.state; 
+
+        return (
+
+            
+            <div>
+            <input>
+
+
+            </input>
+            <button>
+                onCLick={() => this.button}
+            </button>
+            
         
 
             <nav className="navbar navbar-default">
@@ -18,19 +44,25 @@ class Header extends React.Component {
                     <div className="navbar-header">
                         <ul className="nav navbar-nav">
                         <BrowserRouter>
-                            <li><Link to={"/home"} component={Home}>Home</Link></li>
-                            <li><Link to={"/calendar"} component={Calendar}>Calendar</Link></li>
+                            <li><Link to="/home" >SISISISISISISIS</Link></li>
+                            <li><Link to="/calendar" >Calendar</Link></li>
+                            <Route path="/home" component={Home} />
+                            <Route path="/calendar" component={Calendar} />
                             </BrowserRouter>
                         </ul>
                     </div>
                 </div>
             </nav>
+
             
-    
+            
+            
+            </div>
            
         ); 
+
     }
-    
+   
 };
 
 export default Header;

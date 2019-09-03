@@ -5,11 +5,12 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import Home from './components/Home';
 
-import {Header} from './components/Header';
+import Header from './components/Header';
 import Calendar from './components/Calendar';
+import Login from './components/Login';
 
 
-ReactDOM.render(<Calendar />, document.getElementById('root'));
+ReactDOM.render(<Login />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

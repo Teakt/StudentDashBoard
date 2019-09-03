@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,8 +13,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-
-import rien from './components/rien';
 
 
 const useStyles = makeStyles(theme => ({
@@ -42,12 +40,62 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+
+
+
 export default function SignIn() {
   const classes = useStyles();
 
-  function login() {
-    this.props.changeUrl('./components/rien');
+  const [form, setValues] = useState({
+    username: '',
+    password: ''
+  });
+
+
+  const updateField = e => {
+    setValues({
+      ...form,
+      [e.target.name]: e.target.value
+    });
+  };
+
+ 
+   function doGetTEXT()  {
+
+    var url = "http://127.0.0.1:8081/authentification/";
+
+    url += form.username + "/" + form.password;
+
+    var aPromise = fetch(url);
+   
+    aPromise
+      .then(function(response) {
+          console.log("OK! Server returns a response object:");
+          return response.text();
+      })
+      .then(function(data){
+          console.log(data);
+
+          if(data === "OK"){
+            alert("Correct");
+          }
+          else if(data === "PWD"){
+            alert("Bad password !");
+          }
+          else if(data === "EMAIL"){
+            alert("Bad email !");
+          }
+
+          console.log(url);
+
+      })
+      .catch(function(error)  {
+          console.log("Noooooo! Something error:");
+          console.log(error);
+      });
+   
   }
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -67,9 +115,10 @@ export default function SignIn() {
             fullWidth
             id="email"
             label="Email Address"
-            name="email"
-            autoComplete="email"
+            name="username"
             autoFocus
+            value={form.username}
+            onChange={updateField}
           />
           <TextField
             variant="outlined"
@@ -81,6 +130,8 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={form.password}
+            onChange={updateField}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -91,6 +142,7 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={doGetTEXT}
           >
             Login
           </Button>
