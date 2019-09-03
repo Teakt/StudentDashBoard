@@ -4,6 +4,7 @@ const uri = "mongodb+srv://ghaust:EW63BjZ6FFBv5L6X@web-project-nvcrn.mongodb.net
 const client = new MongoClient(uri, { useNewUrlParser: true })
 let Student = require('./Student')
 
+//Système de tags 
 client.connect(err => {
   const collection = client.db("Esiea").collection("Students");
   var obj = [
@@ -54,9 +55,9 @@ client.connect(err => {
   collection.insertMany(obj, function(err, res){
       if (err) throw err
       console.log("Number of documents inserted : " + res.insertedCount)
-      //console.log("Element inserted " + obj)
+      
   })
-  // perform actions on the collection object
+  
   client.close();
 });
 

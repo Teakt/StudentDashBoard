@@ -1,8 +1,8 @@
 const MongoClient = require('mongodb').MongoClient
       bcrypt = require('bcryptjs')
       uri = "mongodb+srv://ghaust:EW63BjZ6FFBv5L6X@web-project-nvcrn.mongodb.net/test?retryWrites=true&w=majority";
-      
-//let Student = require('./Student')
+const functions = require('./functions.js')     
+
 var express = require('express')
     app = express()
 
@@ -33,7 +33,7 @@ app.get('/authentification/:email/:password', function(req, response){
     collection.find(query).toArray(function(err, result){
         if (err) throw err
         if(result.length < 1)
-          response.send(500) //Erreur serveur
+          response.send("EMAIL") //Erreur serveur
         else{
           console.log("Email verification")
           var dbpwd = result[0].password
@@ -41,7 +41,7 @@ app.get('/authentification/:email/:password', function(req, response){
           if(upwd == dbpwd)
               response.send(200) //Succès
           else
-              response.send(403) // Accès refusé / Mot de passe incorrect
+              response.send("PWD") // Accès refusé / Mot de passe incorrect
           }
     })
   client.close();
@@ -59,7 +59,7 @@ app.get('/getAllGrades/:email', function(req, response){
     collection.find(query).toArray(function(err, result){
       if (err) throw err
       if(result.length < 1)
-        response.send("Email not found!") //on retourne un message d'erreur response.send(
+        response.send("EMAIL") //on retourne un message d'erreur response.send(
       else{
         console.log('Get All Grades of ' + result[0].f_name + " " + result[0].l_name)
         response.send(result[0].grades)
@@ -82,7 +82,7 @@ app.get('/getNumberOfAbs/:email', function(req, response){
       if (err) throw err
       
       if(result.length < 1)
-        response.send("Email not found!") //on retourne un message d'erreur 
+        response.send("EMAIL") //on retourne un message d'erreur 
       else{
         console.log('Get Number of Absences of ' + result[0].f_name + " " + result[0].l_name)
         response.send(''+ result[0].absence)
@@ -108,11 +108,40 @@ app.get('/getCalendar/:email', function(req, response){
           collection.find(query).toArray(function(err, result){
               if (err) throw err;
           if(result.length < 1)
-              response.send("Something's wrong with the ID/email")
+              response.send("EMAIL")
           else{
               console.log("Get Calendar Informations")
 
           }
           })
     })
+})
+
+
+app.get('/createTag/:email', function(req, response){
+  const client = new MongoClient(uri, {useNewUrlParser: true})
+  client.connect(err => {
+        const collection = client.db("Esiea").collection("Students")
+        var umail = req.params.email
+            query = {email: umail}
+
+       collection.find(query).toArray(function(err, result){
+          if (err) throw err
+          if(result.length < 1)
+            response.send("EMAIL") //on retourne un message d'erreur response.send(
+          else{
+            console.log('Get All Grades of ' + result[0].f_name + " " + result[0].l_name)
+            grades = result[0].grades
+            var modules = ['Technical Common Core', 'Core Program', 'Elective Program']
+                averageOfEachModule = []
+
+            for(i=0; i<modules.length; i++)
+              averageOfEachModule.push(functions.calculateAverage(grades[modules[i]]))
+            
+           response.send(functions.assignTag(functions.calculateAverage(averageOfEachModule)))
+          }
+      })
+    
+  })
+
 })
