@@ -5,14 +5,40 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
+
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
+import LinkButton from "./LinkButton";
+
+import Home from "./Home" ;
+import Calendar from './Calendar';
+
+
+
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect,
+  withRouter
+} from "react-router-dom";
+
+
+
+
+
+
+
+
+
+
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -44,12 +70,84 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function SignIn() {
+
+  var show = false ;
+
+
+  const [isAuthentificated, setIsAuthentificated] = useState(false);
+  console.log("Status" + isAuthentificated);
+
+const fakeAuth = {
+  isAuthenticated: false,
+  authenticate(cb) {
+    this.isAuthenticated = true;
+    setTimeout(cb, 100); // fake async
+  },
+  signout(cb) {
+    this.isAuthenticated = false;
+    setTimeout(cb, 100);
+  }
+};
+
+
+
+
+
+function PrivateRoute({ component: Component, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        fakeAuth.isAuthenticated ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: { from: props.location }
+            }}
+          />
+        )
+      }
+    />
+  );
+}
+
+
+const AuthButton = withRouter(
+  ({ history }) =>
+    fakeAuth.isAuthenticated ? (
+      <p>
+        Welcome!{" "}
+        <button
+          onClick={() => {
+            fakeAuth.signout(() => this.push("/"));
+          }}
+        >
+          Sign out
+        </button>
+      </p>
+    ) : (
+      <p>Login</p>
+    )
+);
+
+
+
   const classes = useStyles();
 
   const [form, setValues] = useState({
     username: '',
     password: ''
   });
+
+
+  
+
+
+   
+
+
 
 
   const updateField = e => {
@@ -59,14 +157,26 @@ export default function SignIn() {
     });
   };
 
+
+
+  function login(){
+    console.log("ALED");
+    
+  }
+
  
    function doGetTEXT()  {
+
+
+    
 
     var url = "http://127.0.0.1:8081/authentification/";
 
     url += form.username + "/" + form.password;
 
     var aPromise = fetch(url);
+
+    
    
     aPromise
       .then(function(response) {
@@ -77,10 +187,22 @@ export default function SignIn() {
           console.log(data);
 
           if(data === "OK"){
+            
+            //setIsAuthentificated(true) ;
+
             alert("Correct");
+            
+            //alert("Correct" + isAuthentificated);
+            
+
+            
+            
           }
           else if(data === "PWD"){
             alert("Bad password !");
+           
+             
+            
           }
           else if(data === "EMAIL"){
             alert("Bad email !");
@@ -99,6 +221,10 @@ export default function SignIn() {
 
   return (
     <Container component="main" maxWidth="xs">
+
+
+            
+            
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -133,21 +259,41 @@ export default function SignIn() {
             value={form.password}
             onChange={updateField}
           />
+          
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={doGetTEXT}
-          >
-            Login
-          </Button>
+          
+
+          <div>
+          {/* <Link to="/home"> */}
+                        <Button onClick={ () => {}
+          }>Login
+                       {/*  <AuthButton>
+                        Login
+                        </AuthButton> */}
+
+                        </Button>
+                        
+                         
+                      
+                     
+                      
+           {/* </Link> */}
+
+          {/*  <PrivateRoute path="/protected" component={Home} /> */}
+          </div>
+      
+                    
+                    
+          
 
         </form>
+
+        
+
+        
       </div>
     </Container>
   );
