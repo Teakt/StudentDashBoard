@@ -5,12 +5,16 @@
   "dependencies": {
     "@material-ui/core": "^4.3.3",
     "@material-ui/icons": "^4.2.1",
+    "daypilot-pro-angular": "https://npm.daypilot.org/daypilot-pro-angular/trial/2019.3.3985.tar.gz",
+    "daypilot-pro-react": "https://npm.daypilot.org/daypilot-pro-react/trial/2018.2.3319.tar.gz",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-navigation": "^3.12.1",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.1.1"
+    "react-scripts": "3.1.1",
+    "rechart": "0.0.1",
+    "recharts": "^1.7.1"
   },
   "scripts": {
     "start": "react-scripts start",
